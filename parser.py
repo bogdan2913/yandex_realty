@@ -87,16 +87,17 @@ def rotate_ip():
 
 # ─── Telegram ────────────────────────────────────────────────────────────────
 
+_TG_PROXIES = {"https": "socks5h://127.0.0.1:1080", "http": "socks5h://127.0.0.1:1080"}
+
+
 def notify(message):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         return
-    proxy_url = get_proxy_url()
-    proxies   = {"http": proxy_url, "https": proxy_url} if proxy_url else None
     try:
         plain_requests.post(
             f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
             json={"chat_id": TELEGRAM_CHAT_ID, "text": message},
-            proxies=proxies,
+            proxies=_TG_PROXIES,
             timeout=10,
         )
     except Exception:
